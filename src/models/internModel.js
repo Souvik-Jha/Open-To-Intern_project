@@ -22,7 +22,7 @@ const internSchema = new mongoose.Schema({
 
     },
     collegeId:{
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "College"
     },
     isDeleted:{

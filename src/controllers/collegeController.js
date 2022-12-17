@@ -4,8 +4,7 @@ const internModel = require("../models/internModel")
 const isValid = function (value) {
     if (typeof value === "undefined" || value === null) return false;
     if (typeof value === "string" && value.trim().length === 0) return false;
-    if (typeof value === "string") 
-    return true;
+    if (typeof value === "string") return true;
 };
 
 const isvalidRequest = function (requestBody) {
@@ -14,6 +13,7 @@ const isvalidRequest = function (requestBody) {
 
 
 const createCollege = async function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin','*')
     try {
         const requestBody = req.body
         if (!isvalidRequest(requestBody)) return res.status(400).send({ status: false, message:"invalid request parameter ,please provied college detail" })
@@ -42,6 +42,7 @@ const createCollege = async function (req, res) {
 }
 
 const getCollegeDetails = async function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin','*')
     try {
         let query = req.query
         if (!(isvalidRequest(query))) return res.status(400).send({ status: false, msg: "provide request parameter " })
@@ -53,14 +54,11 @@ const getCollegeDetails = async function (req, res) {
         if (!getDetails) return res.status(404).send({ status: false, message: "no such college found" })
 
         let internDetails = await internModel.find({ collegeId: getDetails._id }).select({ name: 1, email: 1, mobile: 1 })
-        let name = getDetails.name;
-        let fullName = getDetails.fullName;
-        let logoLink = getDetails.logoLink;
 
         let collegeData = {
-            name: name,
-            fullName: fullName,
-            logoLink: logoLink,
+            name: getDetails.name,
+            fullName: getDetails.fullName,
+            logoLink: getDetails.logoLink,
             interns: internDetails
         }
         if (internDetails.length == 0) return res.status(200).send({ status: true, data:collegeData, message: "no intern found" })
